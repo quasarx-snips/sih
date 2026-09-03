@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositories - LunaP | Team KompilerZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #05050a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(120, 50, 255, 0.2) 0%, rgba(5, 5, 10, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #white-intro-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #ffffff;
+            z-index: 99999;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        header {
+            width: 100%;
+            padding: 16px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gdg-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .gdg-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .gdg-sub {
+            font-size: 9px;
+            color: #a0a0a0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-nav-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-nav-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00ffcc;
+            color: #00ffcc;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .repo-main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        .repo-title-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transform: scale(1.8) translateY(50px);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .repo-title-wrapper.is-zoomed {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .repo-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            display: flex;
+            justify-content: center;
+            user-select: none;
+            margin: 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .char {
+            display: inline-block;
+            color: #ffffff;
+            -webkit-text-stroke: 2px #000000;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease, text-shadow 0.3s ease;
+            cursor: default;
+            margin-right: -0.02em;
+            margin-left: -0.02em;
+        }
+
+        .char:hover {
+            transform: translateY(-8px) scale(1.15) rotate(-3deg);
+            z-index: 25;
+        }
+
+        /* Bordered Container holding the 3 Flipping Cards/Cubes */
+        .repo-bordered-wrapper {
+            display: flex;
+            gap: 24px;
+            position: relative;
+            width: min(1100px, 95vw);
+            background: rgba(15, 15, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: opacity 1s ease 0.4s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .repo-bordered-wrapper.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 3D Flipping Card / Cube Item */
+        .repo-card-container {
+            width: 310px;
+            height: 330px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .repo-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .repo-card-container:hover .repo-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .repo-card-front, .repo-card-back {
+            position: absolute;
+            inset: 0;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 28px;
+            background: rgba(20, 20, 35, 0.85);
+        }
+
+        .repo-card-back {
+            transform: rotateY(180deg);
+            background: rgba(12, 12, 22, 0.95);
+            border-color: #00ffcc;
+            box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.15);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .repo-card-front h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .repo-icon-box {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .repo-card-container:hover .repo-icon-box {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+
+        .repo-desc {
+            font-size: 0.92rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .back-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00ffcc;
+            margin-bottom: 10px;
+        }
+
+        .back-details {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .btn-redirect {
+            background: #00ffcc;
+            color: #05050a;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .btn-redirect:hover {
+            transform: scale(1.08);
+            background: #ffffff;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.7);
+        }
+
+        .scroll-instruction {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 15px;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+
+        .scroll-instruction.is-visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="white-intro-overlay"></div>
+
+    <header>
+        <a href="landing_page.html" class="gdg-logo">
+            <svg viewBox="0 0 24 24" fill="none" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 8L3 12L7 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 8L21 12L17 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 6L10 18" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <div class="gdg-text">
+                Team KompilerZ
+                <span class="gdg-sub">DevJams'26 • Gravitas • GDG</span>
+            </div>
+        </a>
+
+        <div class="header-actions">
+            <a href="landing_page.html" class="btn-nav-action">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Home
+            </a>
+        </div>
+    </header>
+
+    <main class="repo-main-container">
+        <div class="repo-title-wrapper" id="repoTitleWrapper">
+            <h1 class="repo-title" id="repoTitle">
+                <span class="char" style="--i:0">R</span>
+                <span class="char" style="--i:1">E</span>
+                <span class="char" style="--i:2">P</span>
+                <span class="char" style="--i:3">O</span>
+                <span class="char" style="--i:4">S</span>
+            </h1>
+        </div>
+
+        <div class="repo-bordered-wrapper" id="repoBorderedWrapper">
+            
+            <!-- Card 1: Hugging Face Lunar Crater Detector -->
+            <div class="repo-card-container">
+                <div class="repo-card-inner">
+                    <div class="repo-card-front">
+                        <div>
+                            <div class="repo-icon-box">
+                                <svg class="w-8 h-8 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                </svg>
+                            </div>
+                            <h3>Hugging Face Model</h3>
+                        </div>
+                        <p class="repo-desc">Lunar Crater Detector AI model weights, dataset config, and inference notebooks for hazard detection.</p>
+                        <span style="font-size: 0.75rem; color: #a855f7; font-weight: 700;">HOVER TO FLIP</span>
+                    </div>
+                    <div class="repo-card-back">
+                        <div class="back-title">Lunar_Crater_Detector</div>
+                        <div class="back-details">Hosted on Hugging Face Model Hub. Complete ML pipeline weights for real-time crater identification.</div>
+                        <a href="https://huggingface.co/Dumbface/Lunar_Crater_Detector/tree/main" target="_blank" class="btn-redirect">
+                            <span>Open Repository</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Figma UI/UX Design -->
+            <div class="repo-card-container">
+                <div class="repo-card-inner">
+                    <div class="repo-card-front">
+                        <div>
+                            <div class="repo-icon-box">
+                                <svg class="w-8 h-8 text-pink-400" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5zM12 2h3.5a3.5 3.5 0 1 1 0 7H12V2zm0 9.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0zM5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5zM8.5 16A3.5 3.5 0 1 1 12 19.5V16H8.5z"/>
+                                </svg>
+                            </div>
+                            <h3>Figma UI/UX Design</h3>
+                        </div>
+                        <p class="repo-desc">Comprehensive wireframes, prototype flows, custom space assets, and design system components.</p>
+                        <span style="font-size: 0.75rem; color: #a855f7; font-weight: 700;">HOVER TO FLIP</span>
+                    </div>
+                    <div class="repo-card-back">
+                        <div class="back-title">LunaP Figma Workspace</div>
+                        <div class="back-details">Interactive UI prototype, landing layout specifications, interactive components and typography system.</div>
+                        <a href="https://www.figma.com/design/UzlKwB29c5JUu6x9p1l30I/Untitled?node-id=0-1&t=cNbOmi8dAuWXuRYE-1" target="_blank" class="btn-redirect">
+                            <span>Open Figma Board</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: GitHub Source Code -->
+            <div class="repo-card-container">
+                <div class="repo-card-inner">
+                    <div class="repo-card-front">
+                        <div>
+                            <div class="repo-icon-box">
+                                <svg class="w-8 h-8 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                </svg>
+                            </div>
+                            <h3>GitHub Repository</h3>
+                        </div>
+                        <p class="repo-desc">Complete frontend source code, landing animations, interactive physics simulation, and documentation.</p>
+                        <span style="font-size: 0.75rem; color: #a855f7; font-weight: 700;">HOVER TO FLIP</span>
+                    </div>
+                    <div class="repo-card-back">
+                        <div class="back-title">devjams_lunap</div>
+                        <div class="back-details">Official Team KompilerZ GitHub repository. Full source code for DevJams'26 project.</div>
+                        <a href="https://github.com/quasarx-snips/devjams_lunap/tree/main" target="_blank" class="btn-redirect">
+                            <span>Open GitHub Repo</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="scroll-instruction" id="scrollInstruction">Team KompilerZ • DevJams'26 Repository Hub</div>
+    </main>
+
+    <script>
+        window.addEventListener('load', () => {
+            const whiteOverlay = document.getElementById('white-intro-overlay');
+            const titleWrapper = document.getElementById('repoTitleWrapper');
+            const borderedWrapper = document.getElementById('repoBorderedWrapper');
+            const scrollInstruction = document.getElementById('scrollInstruction');
+
+            if (whiteOverlay) {
+                setTimeout(() => {
+                    whiteOverlay.style.opacity = '0';
+                    setTimeout(() => whiteOverlay.remove(), 850);
+                }, 100);
+            }
+
+            if (titleWrapper) {
+                setTimeout(() => {
+                    titleWrapper.classList.add('is-zoomed');
+                }, 400);
+            }
+
+            if (borderedWrapper) {
+                setTimeout(() => {
+                    borderedWrapper.classList.add('is-visible');
+                }, 700);
+            }
+
+            if (scrollInstruction) {
+                setTimeout(() => {
+                    scrollInstruction.classList.add('is-visible');
+                }, 1100);
+            }
+        });
+
+        const themeColors = ['#00ffcc', '#38bdf8', '#a855f7', '#ff3366', '#ffcc00', '#9333ea', '#06b6d4'];
+        
+        document.querySelectorAll('.char').forEach(char => {
+            char.addEventListener('mouseenter', () => {
+                const randomColor = themeColors[Math.floor(Math.random() * themeColors.length)];
+                char.style.color = randomColor;
+                char.style.textShadow = `0 0 25px ${randomColor}, 4px 4px 0px rgba(0,0,0,0.9)`;
+            });
+            char.addEventListener('mouseleave', () => {
+                char.style.color = '#ffffff';
+                char.style.textShadow = '4px 4px 0px rgba(0, 0, 0, 0.9)';
+            });
+        });
+    </script>
+</body>
+</html>

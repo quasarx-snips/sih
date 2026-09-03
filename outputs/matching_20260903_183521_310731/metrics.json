@@ -1,0 +1,221 @@
+{
+  "metrics": {
+    "metric_scope": "image-based registration metrics; not absolute geographic accuracy",
+    "candidate_matches": 27,
+    "verified_inliers": 24,
+    "outliers": 3,
+    "inlier_ratio": 0.8888888888888888,
+    "evaluated_correspondences": "the supplied candidate correspondence arrays and inlier mask",
+    "candidate_error_statistics": {
+      "count": 27,
+      "mean": 8.936747719034848,
+      "median": 0.42447827539872096,
+      "rmse": 26.35881587443308,
+      "max": 105.67159913144684,
+      "p95": 63.99059898566226
+    },
+    "inlier_error_statistics": {
+      "count": 24,
+      "mean": 0.5549540423566542,
+      "median": 0.3856596987444436,
+      "rmse": 0.7391556078684782,
+      "max": 2.0067284082593564,
+      "p95": 1.6406207011142657
+    },
+    "errors": [
+      68.25022826470492,
+      0.13420122971371157,
+      105.67159913144684,
+      0.15822768674897703,
+      0.46506825940131546,
+      0.42447827539872096,
+      0.8301226637394337,
+      0.7081838650349868,
+      1.7509213520307536,
+      0.3646257165474144,
+      0.9890545490137272,
+      0.09443773797646597,
+      0.11820711714817649,
+      0.5273577868469417,
+      1.0155836792541781,
+      0.22961562435427407,
+      0.09407899741574217,
+      0.7634458809954935,
+      2.0067284082593564,
+      0.4066936809414728,
+      0.8504676903456948,
+      0.13420122971371157,
+      0.31465321345367137,
+      54.05146400122943,
+      0.34383400476391673,
+      0.3174857042140886,
+      0.27722266324747497
+    ],
+    "inlier_errors": [
+      0.13420122971371157,
+      0.15822768674897703,
+      0.46506825940131546,
+      0.42447827539872096,
+      0.8301226637394337,
+      0.7081838650349868,
+      1.7509213520307536,
+      0.3646257165474144,
+      0.9890545490137272,
+      0.09443773797646597,
+      0.11820711714817649,
+      0.5273577868469417,
+      1.0155836792541781,
+      0.22961562435427407,
+      0.09407899741574217,
+      0.7634458809954935,
+      2.0067284082593564,
+      0.4066936809414728,
+      0.8504676903456948,
+      0.13420122971371157,
+      0.31465321345367137,
+      0.34383400476391673,
+      0.3174857042140886,
+      0.27722266324747497
+    ],
+    "thresholds": {
+      "max_rmse_px": 3.0,
+      "min_inlier_ratio": 0.5
+    },
+    "passed": true,
+    "spatial_coverage": {
+      "occupied_cells": 4,
+      "total_cells": 16,
+      "coverage_percentage": 25.0,
+      "points_per_cell": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          15
+        ],
+        [
+          0,
+          0,
+          1,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "transformation_model": "similarity",
+    "transformation_matrix": [
+      [
+        1.1698833966445215,
+        1.0741975244797288,
+        -214.0179065781711
+      ],
+      [
+        -1.0741975244797288,
+        1.1698833966445215,
+        167.58417298087832
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "correspondence_confidence": 64.27987182211605,
+    "status": "VALID CORRESPONDENCE"
+  },
+  "diagnostics": {
+    "execution": "CPU",
+    "timings_seconds": {
+      "preprocessing": 0.002905900008045137,
+      "feature_extraction": 6.104581699939445,
+      "feature_matching": 0.07111859996803105,
+      "geometric_verification": 0.21745900006499141,
+      "local_refinement": 0.008398900041356683,
+      "registration": 0.003430900047533214,
+      "evaluation": 0.0029439000645652413
+    },
+    "total_seconds": 6.411180600058287,
+    "verification": {
+      "model_name": "similarity",
+      "total_matches": 27,
+      "inlier_count": 24,
+      "outlier_count": 3,
+      "inlier_ratio": 0.8888888888888888,
+      "iterations_run": 6,
+      "converged": true,
+      "is_valid": true,
+      "error_stats": {
+        "mean": 0.5549540423566531,
+        "median": 0.3856596987444436,
+        "std": 0.4882386952254276,
+        "rmse": 0.7391556078684771,
+        "min_error": 0.09407899741574217,
+        "max_error": 2.0067284082593684,
+        "percentile_95": 1.6406207011142657
+      },
+      "additional_info": {
+        "threshold": 3.0
+      }
+    },
+    "feature_counts": {
+      "source": 2279,
+      "reference": 1606
+    },
+    "registration": {
+      "model": "affine",
+      "coordinate_convention": "source_to_reference",
+      "transformation": [
+        [
+          1.1698833966445215,
+          1.0741975244797288,
+          -214.0179065781711
+        ],
+        [
+          -1.0741975244797288,
+          1.1698833966445215,
+          167.58417298087832
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "source_shape": [
+        256,
+        256
+      ],
+      "reference_shape": [
+        256,
+        256
+      ],
+      "output_shape": [
+        256,
+        256
+      ]
+    },
+    "output_dir": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731",
+    "artifact_paths": {
+      "enhanced_source": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\source_enhanced.png",
+      "enhanced_reference": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\reference_enhanced.png",
+      "candidate_matches": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\candidate_matches.png",
+      "verified_matches": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\inliers_outliers.png",
+      "registered": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\registered_source.png",
+      "overlay": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\overlay.png",
+      "difference": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\difference.png",
+      "registration_panel": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\registration_panel.png",
+      "report": "C:\\Users\\bijan\\Desktop\\Backup\\outputs\\matching_20260903_183521_310731\\metrics.json"
+    }
+  }
+}

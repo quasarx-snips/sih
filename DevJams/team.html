@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Team - LunaP | Team KompilerZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #05050a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(120, 50, 255, 0.2) 0%, rgba(5, 5, 10, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #white-intro-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #ffffff;
+            z-index: 99999;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        header {
+            width: 100%;
+            padding: 16px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gdg-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .gdg-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .gdg-sub {
+            font-size: 9px;
+            color: #a0a0a0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-nav-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-nav-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00ffcc;
+            color: #00ffcc;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .team-main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        .team-title-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transform: scale(1.8) translateY(60px);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .team-title-wrapper.is-zoomed {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .team-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            display: flex;
+            justify-content: center;
+            user-select: none;
+            margin: 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .char {
+            display: inline-block;
+            color: #ffffff;
+            -webkit-text-stroke: 2px #000000;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease, text-shadow 0.3s ease;
+            cursor: default;
+            margin-right: -0.02em;
+            margin-left: -0.02em;
+        }
+
+        .char:hover {
+            transform: translateY(-8px) scale(1.15) rotate(-3deg);
+            z-index: 25;
+        }
+
+        .slider-explorer-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            width: min(700px, 92vw);
+            height: 380px;
+            background: rgba(15, 15, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: opacity 1s ease 0.6s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+        }
+
+        .slider-explorer-wrapper.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Vertical Slider Track & Lander Thumb */
+        .vertical-track-container {
+            position: relative;
+            width: 8px;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+
+        .vertical-track-thumb {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 36px;
+            top: 0%;
+            transition: top 0.05s linear;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.7));
+            z-index: 20;
+        }
+
+        /* Moon destination icon at the bottom of the track */
+        .track-moon-destination {
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
+            animation: pulseMoon 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseMoon {
+            0% { transform: translateX(-50%) scale(0.95); opacity: 0.8; }
+            100% { transform: translateX(-50%) scale(1.08); opacity: 1; }
+        }
+
+        .members-viewport {
+            flex: 1;
+            height: 130px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .members-viewport::before,
+        .members-viewport::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 35px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .members-viewport::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 18, 0.95), transparent);
+        }
+        .members-viewport::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 18, 0.95), transparent);
+        }
+
+        .members-track {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transition: transform 0.15s cubic-bezier(0.1, 1, 0.1, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 10px 20px;
+        }
+
+        .member-card {
+            height: 110px;
+            background: rgba(15, 15, 26, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+            transform: scale(0.95);
+            filter: blur(1px);
+        }
+
+        .member-card.active-member {
+            background: rgba(0, 255, 204, 0.08);
+            border-color: #00ffcc;
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0px);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3), inset 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .member-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .member-card.active-member .member-name {
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+        }
+
+        .member-details {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 500;
+            display: flex;
+            gap: 18px;
+        }
+
+        .member-userid {
+            color: #38bdf8;
+            font-family: monospace;
+        }
+
+        .member-email {
+            color: #a855f7;
+            font-family: monospace;
+        }
+
+        .scroll-instruction {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 20px;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+        }
+
+        .scroll-instruction.is-visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="white-intro-overlay"></div>
+
+    <header>
+        <a href="landing_page.html" class="gdg-logo">
+            <svg viewBox="0 0 24 24" fill="none" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 8L3 12L7 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 8L21 12L17 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 6L10 18" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <div class="gdg-text">
+                Team KompilerZ
+                <span class="gdg-sub">DevJams'26 • Gravitas • GDG</span>
+            </div>
+        </a>
+
+        <div class="header-actions">
+            <a href="landing_page.html" class="btn-nav-action">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Home
+            </a>
+        </div>
+    </header>
+
+    <main class="team-main-container">
+        <div class="team-title-wrapper" id="teamTitleWrapper">
+            <h1 class="team-title" id="teamTitle">
+                <span class="char" style="--i:0">T</span>
+                <span class="char" style="--i:1">E</span>
+                <span class="char" style="--i:2">A</span>
+                <span class="char" style="--i:3">M</span>
+            </h1>
+        </div>
+
+        <div class="slider-explorer-wrapper" id="sliderExplorer">
+            <!-- Vertical Slider Track & Lander Thumb -->
+            <div class="vertical-track-container" id="trackContainer">
+                <div class="vertical-track-thumb" id="trackThumb">
+                    <!-- Authentic Lunar Lander Module SVG -->
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <defs>
+                            <linearGradient id="goldFoil" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f59e0b" />
+                                <stop offset="50%" stop-color="#d97706" />
+                                <stop offset="100%" stop-color="#b45309" />
+                            </linearGradient>
+                            <linearGradient id="cabinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#cbd5e1" />
+                                <stop offset="100%" stop-color="#64748b" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Landing Legs -->
+                        <path d="M30 65L12 85M70 65L88 85" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M22 75H40M60 75H78" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Footpads -->
+                        <ellipse cx="10" cy="86" rx="6" ry="3" fill="#38bdf8"/>
+                        <ellipse cx="90" cy="86" rx="6" ry="3" fill="#38bdf8"/>
+                        <!-- Descent Stage (Gold Octagon Base) -->
+                        <polygon points="25,50 35,40 65,40 75,50 75,70 25,70" fill="url(#goldFoil)" stroke="#78350f" stroke-width="1.5"/>
+                        <rect x="30" y="52" width="40" height="14" fill="#1e293b" opacity="0.6"/>
+                        <!-- Ascent Stage Cabin (Top) -->
+                        <path d="M35 40L42 22H58L65 40H35Z" fill="url(#cabinGrad)" stroke="#334155" stroke-width="1.5"/>
+                        <!-- Windows & Radar -->
+                        <polygon points="45,28 55,28 58,35 42,35" fill="#0f172a" stroke="#00ffcc" stroke-width="1"/>
+                        <line x1="50" y1="22" x2="50" y2="14" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="50" cy="13" r="2.5" fill="#00ffcc"/>
+                    </svg>
+                </div>
+
+                <!-- Moon Destination Icon at Track Bottom -->
+                <div class="track-moon-destination" style="bottom: -20px;">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <defs>
+                            <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#312e81" />
+                                <stop offset="60%" stop-color="#8b5cf6" />
+                                <stop offset="100%" stop-color="#ec4899" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="44" fill="url(#moonGrad)" />
+                        <circle cx="38" cy="45" r="10" fill="#05050a" opacity="0.35"/>
+                        <circle cx="68" cy="62" r="9" fill="#05050a" opacity="0.35"/>
+                        <circle cx="60" cy="32" r="6" fill="#05050a" opacity="0.35"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Members Viewport Screen Mask -->
+            <div class="members-viewport">
+                <div class="members-track" id="membersTrack">
+                    <div class="member-card active-member" id="member0">
+                        <div class="member-name">Bibhab Saha</div>
+                        <div class="member-details">
+                            <span class="member-userid">26MIS0195</span>
+                            <span class="member-email">bibhab.saha2026@vitstudent.ac.in</span>
+                        </div>
+                    </div>
+
+                    <div class="member-card" id="member1">
+                        <div class="member-name">Janikaa Ravi</div>
+                        <div class="member-details">
+                            <span class="member-userid">26MIS0196</span>
+                            <span class="member-email">janikaa.ravi2026@vitstudent.ac.in</span>
+                        </div>
+                    </div>
+
+                    <div class="member-card" id="member2">
+                        <div class="member-name">S Balaji</div>
+                        <div class="member-details">
+                            <span class="member-userid">@mbrody_comp</span>
+                            <span class="member-email">marcus.brody@lunap.dev</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-instruction" id="scrollInstruction">Scroll anywhere on page to navigate crew slider</div>
+    </main>
+
+    <script>
+        window.addEventListener('load', () => {
+            const whiteOverlay = document.getElementById('white-intro-overlay');
+            const titleWrapper = document.getElementById('teamTitleWrapper');
+            const sliderExplorer = document.getElementById('sliderExplorer');
+            const scrollInstruction = document.getElementById('scrollInstruction');
+
+            if (whiteOverlay) {
+                setTimeout(() => {
+                    whiteOverlay.style.opacity = '0';
+                    setTimeout(() => whiteOverlay.remove(), 850);
+                }, 100);
+            }
+
+            if (titleWrapper) {
+                setTimeout(() => {
+                    titleWrapper.classList.add('is-zoomed');
+                }, 400);
+            }
+
+            if (sliderExplorer) {
+                setTimeout(() => {
+                    sliderExplorer.classList.add('is-visible');
+                }, 800);
+            }
+
+            if (scrollInstruction) {
+                setTimeout(() => {
+                    scrollInstruction.classList.add('is-visible');
+                }, 1200);
+            }
+        });
+
+        // Theme colors for random character hovering
+        const themeColors = ['#00ffcc', '#38bdf8', '#a855f7', '#ff3366', '#ffcc00', '#9333ea', '#06b6d4'];
+        
+        document.querySelectorAll('.char').forEach(char => {
+            char.addEventListener('mouseenter', () => {
+                const randomColor = themeColors[Math.floor(Math.random() * themeColors.length)];
+                char.style.color = randomColor;
+                char.style.textShadow = `0 0 25px ${randomColor}, 4px 4px 0px rgba(0,0,0,0.9)`;
+            });
+            char.addEventListener('mouseleave', () => {
+                char.style.color = '#ffffff';
+                char.style.textShadow = '4px 4px 0px rgba(0, 0, 0, 0.9)';
+            });
+        });
+
+        let scrollProgress = 0; // 0 to 100
+        const trackThumb = document.getElementById('trackThumb');
+        const membersTrack = document.getElementById('membersTrack');
+        const memberCards = [
+            document.getElementById('member0'),
+            document.getElementById('member1'),
+            document.getElementById('member2')
+        ];
+
+        // Intercept wheel event for slider navigation
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            scrollProgress += e.deltaY * 0.15;
+            if (scrollProgress < 0) scrollProgress = 0;
+            if (scrollProgress > 100) scrollProgress = 100;
+
+            updateSliderAndHighlight();
+        }, { passive: false });
+
+        // Touch support for mobile devices
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const diff = touchStartY - touchY;
+            touchStartY = touchY;
+
+            scrollProgress += diff * 0.3;
+            if (scrollProgress < 0) scrollProgress = 0;
+            if (scrollProgress > 100) scrollProgress = 100;
+
+            updateSliderAndHighlight();
+        }, { passive: true });
+
+        function updateSliderAndHighlight() {
+            // Position track thumb precisely so at 100% progress the lander touches the moon destination at the bottom
+            // Track height is 280px, thumb height is 36px -> max top offset is 280 - 36 = 244px
+            const maxTopPx = 280 - 36;
+            const thumbPosPx = (scrollProgress / 100) * maxTopPx;
+            trackThumb.style.top = thumbPosPx + 'px';
+
+            // Equal 33.33% slices for each of the 3 members for perfectly balanced scroll distribution
+            let activeIndex = 0;
+            if (scrollProgress >= 66.66) {
+                activeIndex = 2;
+            } else if (scrollProgress >= 33.33) {
+                activeIndex = 1;
+            } else {
+                activeIndex = 0;
+            }
+
+            // Translate members track vertically to reveal active member in viewport
+            const translateYAmount = activeIndex * 126; // card height + gap
+            membersTrack.style.transform = `translateY(-${translateYAmount}px)`;
+
+            memberCards.forEach((card, index) => {
+                if (index === activeIndex) {
+                    card.classList.add('active-member');
+                } else {
+                    card.classList.remove('active-member');
+                }
+            });
+        }
+
+        // Initialize default state
+        updateSliderAndHighlight();
+    </script>
+</body>
+</html>

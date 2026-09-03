@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LunaP - DevJams '26 | Team KompilerZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #05050a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            transition: background-color 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Screen Impact Shake Animation */
+        @keyframes launchImpactShake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            8% { transform: translate(-10px, 12px) rotate(-1.2deg); }
+            16% { transform: translate(12px, -10px) rotate(1.4deg); }
+            24% { transform: translate(-14px, -10px) rotate(-1deg); }
+            32% { transform: translate(12px, 14px) rotate(1.1deg); }
+            40% { transform: translate(-9px, 8px) rotate(-0.6deg); }
+            50% { transform: translate(8px, -8px) rotate(0.6deg); }
+            65% { transform: translate(-4px, 5px) rotate(-0.3deg); }
+            80% { transform: translate(3px, -3px) rotate(0.1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        body.launched {
+            animation: launchImpactShake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+            background-color: #ffffff;
+        }
+
+        /* Ambient glow transition */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(120, 50, 255, 0.18) 0%, rgba(5, 5, 10, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        body.launched::before {
+            opacity: 0;
+        }
+
+        header {
+            width: 100%;
+            padding: 12px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transform: translateY(-6px);
+            transition: opacity 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.launched header {
+            transform: translateY(-80px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gdg-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: color 1s ease;
+        }
+
+        body.launched .gdg-logo {
+            color: #05050a;
+        }
+
+        .gdg-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .gdg-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .gdg-sub {
+            font-size: 9px;
+            color: #a0a0a0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Updated Menu Wrapper Styles */
+        .menu-dropdown-wrapper {
+            position: relative;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-container:hover {
+            background: rgba(168, 85, 247, 0.22);
+            border-color: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+        }
+
+        .menu-cat {
+            width: 36px;
+            height: 36px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23a855f7"><path d="M5 3L8.5 7H15.5L19 3L21 6V11C21 16.5 17 21 12 21C7 21 3 16.5 3 11V6L5 3M8 10C7.45 10 7 10.45 7 11C7 11.55 7.45 12 8 12C8.55 12 9 11.55 9 11C9 10.45 8.55 10 8 10M16 10C15.45 10 15 10.45 15 11C15 11.55 14.5 12 16 12C16.55 12 17 11.55 17 11C17 10.45 16.55 10 16 10M12 14C10.5 14 9.5 14.8 9 15.5C9 16.2 9.8 17 10.5 17C11.1 17 11.5 16.5 12 16.5C12.5 16.5 12.9 17 13.5 17C14.2 17 15 16.2 15 15.5C14.5 14.8 13.5 14 12 14Z"/></svg>') no-repeat center;
+            filter: drop-shadow(0 0 8px rgba(168,85,247,0.7));
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-container:hover .menu-cat {
+            animation: slowSwingCat 1.2s ease-in-out infinite;
+        }
+
+        @keyframes slowSwingCat {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-12deg); }
+            75% { transform: rotate(12deg); }
+        }
+
+        .menu-container.spin .menu-cat {
+            transform: rotate(360deg);
+        }
+
+        /* Dropdown Box Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 100%;
+            background: rgba(10, 10, 20, 0.9);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1001;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            text-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+            padding-left: 20px;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            width: 100%;
+            max-width: 100vw;
+            padding: 0 20px;
+            z-index: 10;
+            text-align: center;
+            gap: 10px;
+            margin-top: -22px;
+        }
+
+        .hero-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .lunap-title {
+            font-size: clamp(8rem, 25vw, 24rem); 
+            font-weight: 900;
+            letter-spacing: -0.09em;
+            line-height: 0.75;
+            display: flex;
+            justify-content: center;
+            user-select: none;
+            position: relative;
+            z-index: 20;
+            margin: 0;
+            pointer-events: none;
+            transition: opacity 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.launched .lunap-title {
+            transform: translateY(-120px) scale(0.85);
+            opacity: 0;
+        }
+
+        .char {
+            display: inline-block;
+            color: #ffffff;
+            -webkit-text-stroke: 2px #000000;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease, text-shadow 0.3s ease;
+            cursor: default;
+            margin-right: -0.06em;
+            pointer-events: auto;
+        }
+        .char:last-child {
+            margin-right: 0;
+        }
+
+        .char:nth-child(1):hover { color: #a855f7; text-shadow: 0 0 25px rgba(168, 85, 247, 0.9), 4px 4px 0px rgba(0,0,0,0.9); transform: translateY(-18px) scale(1.1) rotate(-3deg); z-index: 25; }
+        .char:nth-child(2):hover { color: #3b82f6; text-shadow: 0 0 25px rgba(59, 130, 246, 0.9), 4px 4px 0px rgba(0,0,0,0.9); transform: translateY(-18px) scale(1.1) rotate(3deg); z-index: 25; }
+        .char:nth-child(3):hover { color: #8b5cf6; text-shadow: 0 0 25px rgba(139, 92, 246, 0.9), 4px 4px 0px rgba(0,0,0,0.9); transform: translateY(-18px) scale(1.1) rotate(-2deg); z-index: 25; }
+        .char:nth-child(4):hover { color: #60a5fa; text-shadow: 0 0 25px rgba(96, 165, 250, 0.9), 4px 4px 0px rgba(0,0,0,0.9); transform: translateY(-18px) scale(1.1) rotate(4deg); z-index: 25; }
+        .char:nth-child(5):hover { color: #c084fc; text-shadow: 0 0 25px rgba(192, 132, 252, 0.9), 4px 4px 0px rgba(0,0,0,0.9); transform: translateY(-18px) scale(1.1) rotate(-4deg); z-index: 25; }
+
+        .icons-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            z-index: 10;
+            margin-top: clamp(-100px, -14vw, -200px);
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .space-icon {
+            width: clamp(140px, 23vw, 320px);
+            height: clamp(140px, 23vw, 320px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+            cursor: pointer;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+            aspect-ratio: 1/1;
+        }
+
+        .space-icon:not(:first-child) {
+            margin-left: clamp(-60px, -9vw, -125px);
+        }
+
+        /* Initial baseline positions (Moon icon left untouched, others shifted slightly up via lower translateY) */
+        .space-icon:nth-child(1) { transform: translateY(70px) rotate(-4deg); z-index: 4; }
+        .space-icon:nth-child(2) { transform: translateY(50px) scale(1.15) rotate(2deg); z-index: 3; }
+        .space-icon:nth-child(3) { transform: translateY(70px) scale(1.1) rotate(-2deg); z-index: 2; }
+        .space-icon:nth-child(4) { transform: translateY(25px) rotate(4deg); z-index: 1; }
+
+        .space-icon:nth-child(1):hover { transform: translateY(50px) scale(1.1) rotate(-4deg); filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.8)); z-index: 12; }
+        .space-icon:nth-child(2):hover { transform: translateY(30px) scale(1.25) rotate(2deg); filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.8)); z-index: 12; }
+        .space-icon:nth-child(3):hover { transform: translateY(50px) scale(1.2) rotate(-2deg); filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.8)); z-index: 12; }
+        .space-icon:nth-child(4):hover { transform: translateY(5px) scale(1.1) rotate(4deg); filter: drop-shadow(0 25px 50px rgba(168, 85, 247, 0.8)); z-index: 12; }
+        
+        /* Jump animations for button hover / Menu Hover Sway Animations */
+        @keyframes swayIcon1 {
+            0%, 100% { transform: translateY(70px) rotate(-4deg); }
+            25% { transform: translateY(60px) rotate(-9deg); }
+            75% { transform: translateY(80px) rotate(1deg); }
+        }
+        @keyframes swayIcon2 {
+            0%, 100% { transform: translateY(50px) scale(1.15) rotate(2deg); }
+            25% { transform: translateY(40px) scale(1.15) rotate(7deg); }
+            75% { transform: translateY(60px) scale(1.15) rotate(-3deg); }
+        }
+        @keyframes swayIcon3 {
+            0%, 100% { transform: translateY(70px) scale(1.1) rotate(-2deg); }
+            25% { transform: translateY(60px) scale(1.1) rotate(-7deg); }
+            75% { transform: translateY(80px) scale(1.1) rotate(3deg); }
+        }
+        @keyframes swayIcon4 {
+            0%, 100% { transform: translateY(25px) rotate(4deg); }
+            25% { transform: translateY(15px) rotate(-1deg); }
+            75% { transform: translateY(35px) rotate(9deg); }
+        }
+
+        .space-icon.swaying:nth-child(1) { animation: swayIcon1 1.8s ease-in-out infinite; }
+        .space-icon.swaying:nth-child(2) { animation: swayIcon2 2.1s ease-in-out infinite; }
+        .space-icon.swaying:nth-child(3) { animation: swayIcon3 1.6s ease-in-out infinite; }
+        .space-icon.swaying:nth-child(4) { animation: swayIcon4 2.3s ease-in-out infinite; }
+
+        @keyframes jumpBounce1 {
+            0%, 100% { transform: translateY(70px) scale(1) rotate(-4deg); }
+            50% { transform: translateY(45px) scale(1.06) rotate(-8deg); }
+        }
+        @keyframes jumpBounce2 {
+            0%, 100% { transform: translateY(50px) scale(1.15) rotate(2deg); }
+            50% { transform: translateY(25px) scale(1.2) rotate(0deg); }
+        }
+        @keyframes jumpBounce3 {
+            0%, 100% { transform: translateY(70px) scale(1.1) rotate(-2deg); }
+            50% { transform: translateY(45px) scale(1.18) rotate(-6deg); }
+        }
+        @keyframes jumpBounce4 {
+            0%, 100% { transform: translateY(25px) scale(1) rotate(4deg); }
+            50% { transform: translateY(0px) scale(1.06) rotate(2deg); }
+        }
+
+        .space-icon.jumping:nth-child(1) { animation: jumpBounce1 0.42s ease-in-out infinite; }
+        .space-icon.jumping:nth-child(2) { animation: jumpBounce2 0.48s ease-in-out infinite; }
+        .space-icon.jumping:nth-child(3) { animation: jumpBounce3 0.39s ease-in-out infinite; }
+        .space-icon.jumping:nth-child(4) { animation: jumpBounce4 0.45s ease-in-out infinite; }
+
+        /* ==================== LAUNCH TRANSITION LOGIC (1.6s duration) ==================== */
+        body.launched .space-icon {
+            pointer-events: none;
+        }
+
+        body.launched .space-icon:not(:nth-child(2)) {
+            animation: none !important;
+        }
+
+        /* 1. Satellite Liftoff */
+        body.launched .space-icon:nth-child(1) {
+            transform: translateY(-130vh) rotate(-15deg) scale(0.75) !important;
+            transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s, filter 1.6s ease 0.05s !important;
+            filter: drop-shadow(0 40px 20px rgba(168, 85, 247, 0.9)) 
+                    drop-shadow(0 90px 45px rgba(255, 42, 109, 0.75)) 
+                    drop-shadow(0 150px 70px rgba(124, 58, 237, 0.5)) !important;
+        }
+
+        /* 2. Moon Liftoff/Exit */
+        @keyframes moonLiftoffSky {
+            0% {
+                transform: translateY(50px) scale(1.15) rotate(2deg);
+                filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+            }
+            100% {
+                transform: translateY(-130vh) scale(0.8) rotate(360deg);
+                filter: drop-shadow(0 40px 20px rgba(139, 92, 246, 0.9)) 
+                        drop-shadow(0 90px 45px rgba(236, 72, 153, 0.75)) 
+                        drop-shadow(0 150px 70px rgba(124, 58, 237, 0.5));
+            }
+        }
+
+        body.launched .space-icon:nth-child(2) {
+            animation: moonLiftoffSky 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards !important;
+            z-index: 50;
+        }
+
+        /* ==================== HANGING EARTH PENDULUM ==================== */
+        .hanging-earth-wrapper {
+            position: absolute;
+            top: -55px;
+            left: 75%; 
+            transform: translateX(-50%) translateY(-120%);
+            transform-origin: top center;
+            z-index: 55;
+            pointer-events: none;
+            opacity: 0;
+            width: 180px;
+            height: 380px;
+        }
+
+        @keyframes earthDropAndFlyUp {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-120%) rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0px) rotate(15deg);
+            }
+            50% {
+                transform: translateX(-50%) translateY(0px) rotate(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-140vh) rotate(45deg);
+            }
+        }
+
+        body.launched .hanging-earth-wrapper {
+            animation: earthDropAndFlyUp 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* 3. Rover Liftoff */
+        body.launched .space-icon:nth-child(3) {
+            transform: translateY(-130vh) rotate(12deg) scale(0.75) !important;
+            transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s, filter 1.6s ease 0.15s !important;
+            filter: drop-shadow(0 40px 20px rgba(59, 130, 246, 0.9)) 
+                    drop-shadow(0 90px 45px rgba(0, 255, 204, 0.75)) 
+                    drop-shadow(0 150px 70px rgba(37, 99, 235, 0.5)) !important;
+        }
+
+        /* 4. Lander Liftoff */
+        body.launched .space-icon:nth-child(4) {
+            transform: translateY(-130vh) rotate(-8deg) scale(0.75) !important;
+            transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s, filter 1.6s ease 0.1s !important;
+            filter: drop-shadow(0 40px 20px rgba(236, 72, 153, 0.9)) 
+                    drop-shadow(0 90px 45px rgba(168, 85, 247, 0.75)) 
+                    drop-shadow(0 150px 70px rgba(219, 39, 119, 0.5)) !important;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+            max-width: 700px;
+            margin-top: 42px;
+            z-index: 10;
+            transition: opacity 0.8s ease, transform 0.8s ease, color 0.8s ease;
+        }
+
+        body.launched .subtitle {
+            opacity: 0;
+            transform: translateY(40px);
+            pointer-events: none;
+        }
+
+        .btn-proceed {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            color: #05050a;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease, transform 0.8s ease;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            margin-top: -1px;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        body.launched .btn-proceed {
+            opacity: 0;
+            transform: translateY(50px) scale(0.85);
+            pointer-events: none;
+        }
+
+        .btn-proceed:hover {
+            transform: scale(1.08) translateY(-3px);
+            background: #f1f5f9;
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.5);
+        }
+
+        #laser-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1005;
+            transition: opacity 0.6s ease;
+        }
+
+        body.launched #laser-canvas {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="laser-canvas"></canvas>
+
+    <div class="hanging-earth-wrapper" id="hangingEarth">
+        <svg viewBox="0 0 180 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <defs>
+                <linearGradient id="earthGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="50%" stop-color="#2563eb" />
+                    <stop offset="100%" stop-color="#1e3a8a" />
+                </linearGradient>
+                <linearGradient id="landGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4ade80" />
+                    <stop offset="100%" stop-color="#166534" />
+                </linearGradient>
+                <filter id="earthGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="15" flood-color="#38bdf8" flood-opacity="0.65"/>
+                </filter>
+            </defs>
+            <circle cx="90" cy="4" r="3.5" fill="#94a3b8" />
+            <line x1="90" y1="4" x2="90" y2="280" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.2" stroke-linecap="round" />
+            
+            <g filter="url(#earthGlow)">
+                <circle cx="90" cy="325" r="48" fill="none" stroke="rgba(56, 189, 248, 0.35)" stroke-width="2" />
+                <circle cx="90" cy="325" r="44" fill="url(#earthGrad)" />
+                <path d="M70 305 C 78 295, 95 300, 102 312 C 110 325, 98 342, 85 346 C 72 350, 60 332, 70 305 Z" fill="url(#landGrad)" opacity="0.85" />
+                <path d="M98 332 C 106 324, 122 328, 118 344 C 114 360, 102 356, 98 332 Z" fill="url(#landGrad)" opacity="0.85" />
+                <path d="M64 326 C 56 318, 48 330, 56 342 C 64 354, 72 338, 64 326 Z" fill="url(#landGrad)" opacity="0.85" />
+                <path d="M72 298 Q 85 294 98 302" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.5" />
+                <path d="M56 342 Q 68 350 80 338" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+            </g>
+        </svg>
+    </div>
+
+    <header>
+        <a href="#" class="gdg-logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 8L3 12L7 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 8L21 12L17 16" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 6L10 18" stroke="#00ffcc" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <div class="gdg-text">
+                Team KompilerZ
+                <span class="gdg-sub">DevJams'26 • Gravitas • GDG</span>
+            </div>
+        </a>
+        <div class="menu-dropdown-wrapper" id="menuWrapper">
+            <div class="menu-container" id="menuBtn">
+                <span>Menu</span>
+                <div class="menu-cat"></div>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="" class="dropdown-item">Home</a>
+                <a href="team.html" class="dropdown-item">About Team</a>
+                <a href="repo.html" class="dropdown-item">Repository</a>
+                <a href="docs.html" class="dropdown-item">Documentation</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <div class="hero-wrapper">
+            <h1 class="lunap-title" id="lunap-heading">
+                <span class="char">L</span><span class="char">u</span><span class="char">n</span><span class="char">a</span><span class="char">P</span>
+            </h1>
+
+            <div class="icons-row">
+                <svg class="space-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="smoothGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e1b4b" />
+                            <stop offset="50%" stop-color="#7c3aed" />
+                            <stop offset="100%" stop-color="#2563eb" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="4" y="38" width="30" height="24" rx="6" fill="url(#smoothGrad1)" opacity="0.9" />
+                    <line x1="11" y1="38" x2="11" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+                    <line x1="18" y1="38" x2="18" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+                    <line x1="25" y1="38" x2="25" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+                    
+                    <rect x="66" y="38" width="30" height="24" rx="6" fill="url(#smoothGrad1)" opacity="0.9" />
+                    <line x1="73" y1="38" x2="73" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+                    <line x1="80" y1="38" x2="80" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+                    <line x1="87" y1="38" x2="87" y2="62" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
+
+                    <rect x="34" y="30" width="32" height="40" rx="8" fill="url(#smoothGrad1)" />
+                    
+                    <rect x="38" y="36" width="24" height="18" rx="5" fill="#05050a" stroke="#7c3aed" stroke-width="2" opacity="0.95"/>
+                    <circle cx="45" cy="45" r="4.5" fill="#1e1b4b" stroke="#3b82f6" stroke-width="1.2"/>
+                    <circle cx="55" cy="45" r="4.5" fill="#1e1b4b" stroke="#3b82f6" stroke-width="1.2"/>
+                    
+                    <circle cx="45" cy="45" r="2.5" fill="#00ffcc" />
+                    <circle cx="55" cy="45" r="2.5" fill="#00ffcc" />
+
+                    <path d="M50 16v14" stroke="#9333ea" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="14" r="3" fill="#ff2a6d"/>
+                    <path d="M40 70L34 84M60 70L66 84" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M47 70V78M53 70V78" stroke="#ff2a6d" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+
+                <svg class="space-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="smoothGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop class="moon-grad-stop1" offset="0%" stop-color="#312e81" />
+                            <stop class="moon-grad-stop2" offset="60%" stop-color="#8b5cf6" />
+                            <stop class="moon-grad-stop3" offset="100%" stop-color="#ec4899" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="44" fill="url(#smoothGrad2)" />
+                    <circle class="moon-crater" cx="38" cy="45" r="10" fill="#05050a" opacity="0.35"/>
+                    <circle class="moon-crater" cx="68" cy="62" r="9" fill="#05050a" opacity="0.35"/>
+                    <circle class="moon-crater" cx="60" cy="32" r="6" fill="#05050a" opacity="0.35"/>
+                    <circle class="moon-crater" cx="48" cy="68" r="5" fill="#05050a" opacity="0.35"/>
+                    <circle class="moon-crater" cx="28" cy="58" r="4" fill="#05050a" opacity="0.35"/>
+                </svg>
+
+                <svg class="space-icon" id="lander-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="smoothGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b0764" />
+                            <stop offset="50%" stop-color="#7e22ce" />
+                            <stop offset="100%" stop-color="#2563eb" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M22 54L32 36H68L78 54H85V72H15V54H22Z" fill="url(#smoothGrad4)" stroke-linejoin="round"/>
+                    <rect x="24" y="16" width="52" height="24" rx="12" fill="#05050a" stroke="#7e22ce" stroke-width="2.5" opacity="0.95"/>
+                    
+                    <circle id="left-eye-base" cx="40" cy="28" r="7" fill="#1e1b4b" stroke="#3b82f6" stroke-width="1.5"/>
+                    <circle id="right-eye-base" cx="60" cy="28" r="7" fill="#1e1b4b" stroke="#3b82f6" stroke-width="1.5"/>
+                    
+                    <circle id="left-pupil" cx="40" cy="28" r="4" fill="#ff2a6d" style="transition: fill 0.2s ease, filter 0.2s ease;" />
+                    <circle id="right-pupil" cx="60" cy="28" r="4" fill="#ff2a6d" style="transition: fill 0.2s ease, filter 0.2s ease;" />
+                    
+                    <rect x="40" y="59" width="20" height="8" rx="4" fill="#05050a" opacity="0.6"/>
+                    <circle cx="25" cy="80" r="8.5" fill="#05050a" opacity="0.9"/>
+                    <circle cx="50" cy="80" r="8.5" fill="#05050a" opacity="0.9"/>
+                    <circle cx="75" cy="80" r="8.5" fill="#05050a" opacity="0.9"/>
+                    <circle cx="25" cy="80" r="3.5" fill="#3b82f6"/>
+                    <circle cx="50" cy="80" r="3.5" fill="#3b82f6"/>
+                    <circle cx="75" cy="80" r="3.5" fill="#3b82f6"/>
+                </svg>
+
+                <svg class="space-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="smoothGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e1b4b" />
+                            <stop offset="50%" stop-color="#6d28d9" />
+                            <stop offset="100%" stop-color="#3b82f6" />
+                        </linearGradient>
+                    </defs>
+                    <line x1="50" y1="8" x2="50" y2="16" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M38 28C38 18 62 18 62 28V34H38V28Z" fill="url(#smoothGrad3)"/>
+                    <circle cx="50" cy="26" r="8" fill="#05050a" opacity="0.5"/>
+                    <path d="M46 26C46 24 48 22 50 22V30C48 30 46 28 46 26Z" fill="#ff2a6d"/>
+                    <rect x="30" y="34" width="40" height="22" rx="6" fill="url(#smoothGrad3)"/>
+                    <path d="M30 56H70L62 74H38L30 56Z" fill="url(#smoothGrad3)"/>
+                    <circle cx="50" cy="65" r="4" fill="#05050a" opacity="0.5"/>
+                    <path d="M34 74L16 90M66 74L84 90M50 74V90" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                    <rect x="10" y="88" width="12" height="4" rx="2" fill="#3b82f6"/>
+                    <rect x="78" y="88" width="12" height="4" rx="2" fill="#3b82f6"/>
+                    <rect x="44" y="88" width="12" height="4" rx="2" fill="#3b82f6"/>
+                </svg>
+            </div>
+        </div>
+
+        <p class="subtitle">Autonomous Hazard-Aware Lunar Surface Navigator and Analyzer</p>
+
+        <button class="btn-proceed" id="proceed-btn" onclick="triggerLaunch('upload.html')">
+            Proceed further
+        </button>
+
+    </main>
+
+    <script>
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let isLaunched = false;
+
+        window.addEventListener('mousemove', (e) => {
+            if (isLaunched) return;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            updateTrackingSensors();
+        });
+
+        // Dropdown Toggle Logic with Simultaneous Cat Icon Spin
+        const menuBtn = document.getElementById('menuBtn');
+        const menuWrapper = document.getElementById('menuWrapper');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const spaceIcons = document.querySelectorAll('.space-icon');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+            menuBtn.classList.toggle('spin');
+        });
+
+        // Dropdown Item Click Launch Integration (Silent pass for Home)
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetUrl = item.getAttribute('href');
+                dropdownMenu.classList.remove('show');
+                menuBtn.classList.remove('spin');
+                
+                // Silent pass button for Home: do nothing and do not trigger launch
+                if (item.textContent.trim() === 'Home' || targetUrl === "" || !targetUrl) {
+                    return;
+                }
+
+                triggerLaunch(targetUrl);
+            });
+        });
+
+        // Menu Hover Sway Trigger
+        menuWrapper.addEventListener('mouseenter', () => {
+            if (isLaunched) return;
+            spaceIcons.forEach(icon => icon.classList.add('swaying'));
+        });
+
+        menuWrapper.addEventListener('mouseleave', () => {
+            if (isLaunched) return;
+            spaceIcons.forEach(icon => icon.classList.remove('swaying'));
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', () => {
+            if (dropdownMenu.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+                menuBtn.classList.remove('spin');
+            }
+        });
+
+        const roverLeftPupil = document.getElementById('left-pupil');
+        const roverRightPupil = document.getElementById('right-pupil');
+
+        const canvas = document.getElementById('laser-canvas');
+        const ctx = canvas.getContext('2d');
+        const proceedBtn = document.getElementById('proceed-btn');
+
+        proceedBtn.addEventListener('mouseenter', () => {
+            if (isLaunched) return;
+            spaceIcons.forEach(icon => icon.classList.add('jumping'));
+        });
+        proceedBtn.addEventListener('mouseleave', () => {
+            if (isLaunched) return;
+            spaceIcons.forEach(icon => icon.classList.remove('jumping'));
+        });
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function updateTrackingSensors() {
+            const rovLBase = document.getElementById('left-eye-base').getBoundingClientRect();
+            const rovRBase = document.getElementById('right-eye-base').getBoundingClientRect();
+            if(rovLBase.width > 0) {
+                const rlx = rovLBase.left + rovLBase.width / 2;
+                const rly = rovLBase.top + rovLBase.height / 2;
+                const rrx = rovRBase.left + rovRBase.width / 2;
+                const rry = rovRBase.top + rovRBase.height / 2;
+
+                const angleRovL = Math.atan2(mouseY - rly, mouseX - rlx);
+                const angleRovR = Math.atan2(mouseY - rry, mouseX - rrx);
+                const maxDistRov = 2.5;
+
+                roverLeftPupil.setAttribute('cx', 40 + Math.cos(angleRovL) * maxDistRov);
+                roverLeftPupil.setAttribute('cy', 28 + Math.sin(angleRovL) * maxDistRov);
+                roverRightPupil.setAttribute('cx', 60 + Math.cos(angleRovR) * maxDistRov);
+                roverRightPupil.setAttribute('cy', 28 + Math.sin(angleRovR) * maxDistRov);
+            }
+        }
+
+        let laserPulse = 0;
+        
+        function renderLasers() {
+            if (isLaunched) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const btnRect = proceedBtn.getBoundingClientRect();
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            const distToBtn = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+
+            const menuRect = menuBtn.getBoundingClientRect();
+            const isNearMenu = (mouseX >= menuRect.left - 30 && mouseX <= menuRect.right + 30 && mouseY >= menuRect.top - 30 && mouseY <= menuRect.bottom + 30);
+            
+            let isNearDropdown = false;
+            if (dropdownMenu.classList.contains('show')) {
+                const dropRect = dropdownMenu.getBoundingClientRect();
+                isNearDropdown = (mouseX >= dropRect.left - 20 && mouseX <= dropRect.right + 20 && mouseY >= dropRect.top - 20 && mouseY <= dropRect.bottom + 20);
+            }
+
+            const isNearButton = distToBtn < 150 || (mouseX >= btnRect.left - 50 && mouseX <= btnRect.right + 50 && mouseY >= btnRect.top - 50 && mouseY <= btnRect.bottom + 50) || isNearMenu || isNearDropdown;
+            
+            const laserColor = isNearButton ? '#00ffcc' : '#ff2a6d';
+
+            [roverLeftPupil, roverRightPupil].forEach(p => {
+                p.setAttribute('fill', laserColor);
+                p.style.filter = `drop-shadow(0 0 8px ${laserColor})`;
+            });
+
+            const rovLRect = roverLeftPupil.getBoundingClientRect();
+            const rovRRect = roverRightPupil.getBoundingClientRect();
+            
+            if (rovLRect.width === 0) {
+                requestAnimationFrame(renderLasers);
+                return;
+            }
+
+            laserPulse += 0.3;
+            const alpha = 0.85 + Math.sin(laserPulse) * 0.15;
+
+            [
+                {x: rovLRect.left + rovLRect.width/2, y: rovLRect.top + rovLRect.height/2},
+                {x: rovRRect.left + rovRRect.width/2, y: rovRRect.top + rovRRect.height/2}
+            ].forEach(origin => {
+                ctx.beginPath();
+                ctx.moveTo(origin.x, origin.y);
+                ctx.lineTo(mouseX, mouseY);
+                ctx.strokeStyle = isNearButton ? `rgba(0, 255, 204, ${alpha * 0.8})` : `rgba(255, 42, 109, ${alpha * 0.8})`;
+                ctx.lineWidth = 2;
+                ctx.shadowColor = laserColor;
+                ctx.shadowBlur = 18;
+                ctx.stroke();
+            });
+
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, isNearButton ? 8 : 6, 0, Math.PI * 2);
+            ctx.fillStyle = isNearButton ? 'rgba(0, 255, 204, 0.9)' : 'rgba(255, 42, 109, 0.9)';
+            ctx.fill();
+
+            requestAnimationFrame(renderLasers);
+        }
+
+        requestAnimationFrame(renderLasers);
+
+        function triggerLaunch(targetUrl) {
+            if (isLaunched) return;
+            isLaunched = true;
+
+            spaceIcons.forEach(icon => {
+                icon.classList.remove('swaying', 'jumping');
+            });
+
+            document.body.classList.add('launched');
+
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 1600);
+        }
+    </script>
+</body>
+</html>
