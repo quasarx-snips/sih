@@ -1,0 +1,188 @@
+{
+  "metrics": {
+    "metric_scope": "image-based registration metrics; not absolute geographic accuracy",
+    "candidate_matches": 11,
+    "verified_inliers": 7,
+    "outliers": 4,
+    "inlier_ratio": 0.6363636363636364,
+    "evaluated_correspondences": "the supplied candidate correspondence arrays and inlier mask",
+    "candidate_error_statistics": {
+      "count": 11,
+      "mean": 335.65009312629394,
+      "median": 0.9941313316003976,
+      "rmse": 648.8527743170482,
+      "max": 1842.8276923707583,
+      "p95": 1325.3325347193215
+    },
+    "inlier_error_statistics": {
+      "count": 7,
+      "mean": 0.5313795217733982,
+      "median": 0.1157845561554628,
+      "rmse": 0.7648728973314122,
+      "max": 1.606137186319144,
+      "p95": 1.4225354299035198
+    },
+    "errors": [
+      0.6941081405506998,
+      0.10761414453465948,
+      0.10761414453465948,
+      0.9941313316003976,
+      370.5415190916679,
+      1.606137186319144,
+      0.09426714871876482,
+      0.1157845561554628,
+      667.2247792065089,
+      807.8373770678849,
+      1842.8276923707583
+    ],
+    "inlier_errors": [
+      0.6941081405506998,
+      0.10761414453465948,
+      0.10761414453465948,
+      0.9941313316003976,
+      1.606137186319144,
+      0.09426714871876482,
+      0.1157845561554628
+    ],
+    "thresholds": {
+      "max_rmse_px": 3.0,
+      "min_inlier_ratio": 0.5
+    },
+    "passed": true,
+    "spatial_coverage": {
+      "occupied_cells": 5,
+      "total_cells": 16,
+      "coverage_percentage": 31.25,
+      "points_per_cell": [
+        [
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "transformation_model": "homography",
+    "transformation_matrix": [
+      [
+        2.984340983901713,
+        4.509218234543563e-05,
+        -4.872731527863459
+      ],
+      [
+        -0.002593865510809224,
+        0.9869053682617337,
+        1.9282882161163513
+      ],
+      [
+        -1.2186513313129427e-05,
+        -1.632158570735356e-05,
+        1.0
+      ]
+    ],
+    "correspondence_confidence": 46.82878540416831,
+    "status": "VALID CORRESPONDENCE"
+  },
+  "diagnostics": {
+    "execution": "CPU",
+    "timings_seconds": {
+      "preprocessing": 0.008690699934959412,
+      "feature_extraction": 66.51368600002024,
+      "feature_matching": 0.14505159994587302,
+      "geometric_verification": 0.303274399950169,
+      "local_refinement": 0.04998670006170869,
+      "registration": 0.13864950009156018,
+      "evaluation": 0.013946600025519729
+    },
+    "total_seconds": 67.17355169996154,
+    "verification": {
+      "model_name": "homography",
+      "total_matches": 11,
+      "inlier_count": 7,
+      "outlier_count": 4,
+      "inlier_ratio": 0.6363636363636364,
+      "iterations_run": 69,
+      "converged": true,
+      "is_valid": true,
+      "error_stats": {
+        "mean": 0.5313795217733942,
+        "median": 0.1157845561554628,
+        "std": 0.5501512091343799,
+        "rmse": 0.7648728973314071,
+        "min_error": 0.09426714871876482,
+        "max_error": 1.6061371863191363,
+        "percentile_95": 1.4225354299035142
+      },
+      "additional_info": {
+        "threshold": 3.0
+      }
+    },
+    "feature_counts": {
+      "source": 3000,
+      "reference": 3000
+    },
+    "registration": {
+      "model": "projective",
+      "coordinate_convention": "source_to_reference",
+      "transformation": [
+        [
+          2.984340983901713,
+          4.509218234543563e-05,
+          -4.872731527863459
+        ],
+        [
+          -0.002593865510809224,
+          0.9869053682617337,
+          1.9282882161163513
+        ],
+        [
+          -1.2186513313129427e-05,
+          -1.632158570735356e-05,
+          1.0
+        ]
+      ],
+      "source_shape": [
+        739,
+        660
+      ],
+      "reference_shape": [
+        739,
+        1980
+      ],
+      "output_shape": [
+        739,
+        1980
+      ]
+    },
+    "output_dir": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012",
+    "artifact_paths": {
+      "enhanced_source": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\source_enhanced.png",
+      "enhanced_reference": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\reference_enhanced.png",
+      "candidate_matches": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\candidate_matches.png",
+      "verified_matches": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\inliers_outliers.png",
+      "registered": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\registered_source.png",
+      "overlay": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\overlay.png",
+      "difference": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\difference.png",
+      "registration_panel": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\registration_panel.png",
+      "report": "C:\\Users\\bijan\\Desktop\\SIH26166\\outputs\\matching_20260903_231905_520012\\metrics.json"
+    }
+  }
+}

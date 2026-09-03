@@ -1,5 +1,1 @@
-.venv/
-__pycache__/
-outputs/
-temp/
-_sih26166_source/.git/
+DevJams/Module1_2_Integrated/models/crater_unet_best.pth
