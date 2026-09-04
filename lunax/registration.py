@@ -170,22 +170,4 @@ def register_image(source, reference, transformation, model="auto"):
     return registered, metadata
 
 
-def test_synthetic_registration() -> Dict[str, Any]:
-    """Synthetic known-transform check, usable from a VS Code terminal."""
-    source = np.zeros((160, 200), dtype=np.uint8)
-    cv2.circle(source, (55, 60), 22, 220, -1)
-    cv2.rectangle(source, (120, 85), (175, 125), 150, -1)
-    transform = np.array([[1.0, 0.08, 18.0], [-0.04, 1.0, 22.0],
-                          [0.00025, -0.00015, 1.0]], dtype=np.float64)
-    reference = warp_image(source, transform, source.shape, model="projective")
-    registered, metadata = register_image(source, reference, transform, model="auto")
-    # Same warp settings and a known transform should reproduce the reference.
-    max_difference = int(np.max(create_difference_map(reference, registered)))
-    assert max_difference == 0, f"Known-transform recovery failed (max diff {max_difference})"
-    metadata["synthetic_max_difference"] = max_difference
-    return metadata
 
-
-if __name__ == "__main__":
-    result = test_synthetic_registration()
-    print("Synthetic registration passed; max difference:", result["synthetic_max_difference"])

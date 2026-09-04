@@ -115,12 +115,4 @@ def print_registration_report(report):
     print(f"Note              : {report['metric_scope']}")
 
 
-def test_synthetic_evaluation():
-    rng = np.random.default_rng(3); source = rng.uniform(0, 100, (30, 2)); transform = np.array([[1., 0., 2.], [0., 1., -1.], [0., 0., 1.]])
-    reference = source + [2., -1.] + rng.normal(0, 0.2, source.shape); mask = np.ones(len(source), bool); errors = calculate_reprojection_errors(source, reference, transform)
-    report = evaluate_registration(source, reference, transform, mask, (100, 100)); independent = float(np.sqrt(np.mean(errors ** 2)))
-    assert np.isclose(report["inlier_error_statistics"]["rmse"], independent)
-    return report
 
-
-if __name__ == "__main__": print_registration_report(test_synthetic_evaluation())

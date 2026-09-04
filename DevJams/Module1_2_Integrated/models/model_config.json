@@ -1,9 +1,0 @@
-{
-  "encoder_name": "resnet34",
-  "encoder_weights": null,
-  "in_channels": 3,
-  "classes": 1,
-  "img_size": 256,
-  "input_format": "RGB, HWC->CHW, float32 divided by 255.0",
-  "output_format": "single-channel logits; apply sigmoid for probability"
-}

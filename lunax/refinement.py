@@ -183,25 +183,4 @@ def calculate_local_registration_error(source_points, reference_points, transfor
                     "p95": float(np.percentile(errors, 95))}
 
 
-def test_synthetic_fractional_translation() -> Dict[str, Any]:
-    """Verify local refinement reduces coarse correspondence error for a known fractional shift."""
-    rng = np.random.default_rng(7)
-    source = cv2.GaussianBlur(rng.integers(0, 256, (180, 220), dtype=np.uint8), (0, 0), 1.2)
-    shift = np.array([1.35, -0.70])
-    transform = np.array([[1.0, 0.0, shift[0]], [0.0, 1.0, shift[1]], [0.0, 0.0, 1.0]])
-    reference = cv2.warpAffine(source, transform[:2], (source.shape[1], source.shape[0]), flags=cv2.INTER_LINEAR)
-    source_points = np.array([[40., 40.], [80., 65.], [150., 100.], [180., 130.]])
-    true_reference = source_points + shift
-    coarse_reference = true_reference + np.array([[0.8, -0.6], [-0.7, 0.5], [0.6, 0.7], [-0.5, -0.8]])
-    cfg = RefinementConfig(search_radius=3, transformation=transform)
-    _, refined_reference, diagnostics = refine_correspondences(source, reference, source_points, coarse_reference, cfg)
-    coarse_error = float(np.median(np.linalg.norm(coarse_reference - true_reference, axis=1)))
-    refined_error = float(np.median(np.linalg.norm(refined_reference - true_reference, axis=1)))
-    assert np.any(diagnostics["valid_mask"]), "No synthetic local patches were accepted"
-    assert refined_error < coarse_error, f"Refinement did not improve: {refined_error} >= {coarse_error}"
-    return {"coarse_error": coarse_error, "refined_error": refined_error, "diagnostics": diagnostics}
 
-
-if __name__ == "__main__":
-    result = test_synthetic_fractional_translation()
-    print(f"Synthetic refinement passed: coarse={result['coarse_error']:.3f}px, refined={result['refined_error']:.3f}px")

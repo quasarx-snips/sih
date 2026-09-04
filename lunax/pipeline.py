@@ -130,5 +130,4 @@ def print_lunax_pipeline_report(result: RegistrationResult) -> None:
     if "artifact_paths" in result.diagnostics: print("Registration output    :",result.diagnostics["artifact_paths"]["registered"])
     print("================================================")
 
-def run_notebook_demo(source_path: Any, reference_path: Any, output_dir: Optional[Any] = None) -> RegistrationResult:
-    return run_lunax_registration(source_path,reference_path,{"verbose":True,"save_outputs":output_dir is not None,"output_dir":str(output_dir) if output_dir else None})
+

@@ -90,7 +90,7 @@ os.makedirs(TEMP_DIR, exist_ok=True)
 PUBLIC_FILES = {
     "landing_page.html", "upload.html", "matching.html", "hazard-map.html",
     "analysis.html", "landing-zones.html", "route-analysis.html",
-    "science-map.html", "team.html", "repo.html", "storage.js",
+    "science-map.html", "storage.js",
 }
 
 
